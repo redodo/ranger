@@ -25,35 +25,35 @@ the maximum amount we can.
 This one (Rust):
 
 ```bash
-$ multitime -n20 -q -s0 -i "cat samples/1m.txt" ranger
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ranger
 ===> multitime results
 1: -i "cat samples/1m.txt" -q ranger
             Mean        Std.Dev.    Min         Median      Max
-real        0.185       0.011       0.167       0.192       0.196
-user        0.160       0.013       0.138       0.165       0.177
-sys         0.025       0.004       0.016       0.026       0.030
+real        0.195       0.014       0.172       0.202       0.223
+user        0.170       0.015       0.136       0.170       0.202
+sys         0.024       0.008       0.007       0.023       0.044
 ```
 
 [edelooff/carrange](https://github.com/edelooff/carrange) (C++):
 
 ```bash
-$ multitime -n20 -q -s0 -i "cat samples/1m.txt" composer
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" composer
 ===> multitime results
 1: -i "cat samples/1m.txt" -q composer
             Mean        Std.Dev.    Min         Median      Max
-real        0.205       0.013       0.178       0.210       0.217
-user        0.178       0.014       0.150       0.179       0.200
-sys         0.026       0.008       0.013       0.026       0.043
+real        0.201       0.013       0.180       0.206       0.224
+user        0.179       0.015       0.150       0.178       0.212
+sys         0.022       0.008       0.003       0.020       0.047
 ```
 
 [Gradecak/rs-bouquets](https://github.com/Gradecak/rs-bouquets) (Rust):
 
 ```bash
-$ multitime -n20 -q -s0 -i "cat samples/1m.txt" rs-bouquets
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" rs-bouquets
 ===> multitime results
 1: -i "cat samples/1m.txt" -q rs-bouquets
             Mean        Std.Dev.    Min         Median      Max
-real        0.402       0.017       0.374       0.411       0.431
-user        0.376       0.020       0.346       0.381       0.407
-sys         0.024       0.009       0.010       0.025       0.045
+real        0.406       0.016       0.377       0.413       0.435
+user        0.380       0.018       0.331       0.383       0.413
+sys         0.025       0.008       0.007       0.023       0.046
 ```
