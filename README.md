@@ -29,9 +29,9 @@ $ multitime -n20 -q -s0 -i "cat samples/1m.txt" ranger
 ===> multitime results
 1: -i "cat samples/1m.txt" -q ranger
             Mean        Std.Dev.    Min         Median      Max
-real        0.205       0.013       0.184       0.214       0.218
-user        0.181       0.014       0.153       0.186       0.199
-sys         0.023       0.008       0.010       0.023       0.037
+real        0.198       0.015       0.171       0.206       0.223
+user        0.173       0.017       0.144       0.172       0.207
+sys         0.024       0.009       0.003       0.025       0.036
 ```
 
 [edelooff/carrange](https://github.com/edelooff/carrange) (C++):

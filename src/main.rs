@@ -169,6 +169,7 @@ impl ProductionLine {
                 })
                 .collect();
             println!("{}{}{}", design.name, design.size, stem_string);
+            return;
         }
     }
 }
