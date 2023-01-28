@@ -57,3 +57,33 @@ real        0.406       0.016       0.377       0.413       0.435
 user        0.380       0.018       0.331       0.383       0.413
 sys         0.025       0.008       0.007       0.023       0.046
 ```
+
+## Benchmark of reference solution
+
+This gets its own section because compiled languages are in a league of their own.
+
+[reference solution](https://github.com/bloomon/code-challenge-verifier/blob/master/reference.py) (Python 3.10):
+
+```bash
+$ multitime -n10 -q -s0 -i "cat samples/1m.txt" python3.10 reference.py
+===> multitime results
+1: -i "cat samples/1m.txt" -q python3.10 reference.py
+            Mean        Std.Dev.    Min         Median      Max
+real        20.417      0.122       20.154      20.424      20.570
+user        20.339      0.136       20.088      20.333      20.522
+sys         0.031       0.029       0.006       0.021       0.111
+```
+
+Curiously, the reference solution was slower in Python 3.11 🤔
+
+[reference solution](https://github.com/bloomon/code-challenge-verifier/blob/master/reference.py) (Python 3.11):
+
+```bash
+$ multitime -n10 -q -s0 -i "cat samples/1m.txt" python3.11 reference.py
+===> multitime results
+1: -i "cat samples/1m.txt" -q python3.11 reference.py
+            Mean        Std.Dev.    Min         Median      Max
+real        26.699      0.333       26.163      26.691      27.391
+user        26.613      0.348       26.117      26.619      27.332
+sys         0.026       0.026       0.000       0.016       0.091
+```
