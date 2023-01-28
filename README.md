@@ -4,19 +4,23 @@ This solution uses 512-bit SIMD vectors to store and compare stem stock to stem
 requirements per design. The vectors that are used have 32 lanes of `u16` values. This
 allows for every possible species (a to z) to have a maximum of 65535 of stock.
 
-The feasibility of a design can be checked in 5 operations, regardless of the amount of
-flowers in a design:
+The feasibility of a design can be checked in a couple of operations, regardless of the
+amount of stems in a design:
 
-1. Does the stock contain the minimum of flowers in the design (2 operations): `any(stock < design_min_stems)`
-2. Take the most stems we can take: `take = min(stock, design_max_stems)`
-3. Calculate how many stems we took: `took = reduce_sum(take)`
-4. Did we take enough stems: `took >= design_total`
+1. Take the maximum amount of stems we can take: `stems = simd_min(stock, design.max_stems)`
+2. Check if we have enough stems: `reduce_sum(stems) >= design.total`
+3. Check if we at least one of each needed stem: `!any(simd_lt(stems, design.min_stems))`
 
-After these operations we are left with a bunch of stems we took and the total amount
-of them. Because of the nature of `min(stock, design_max_stems)`, it's very likely that
-we took too many stems. In that case we need to remove some stems from our hand. This
-operation is quite simple and comes down to iterating over all the stems and returning
-the maximum amount we can.
+After this we have enough stems. However, since we took the maximum amount possible per
+stem, we need to make sure that we return the excess amount of stems we took. This is
+done over a simple iteration where stems are returned to the stock until the amount
+required by the design is met.
+
+Besides this a number of optimizations are implemented:
+
+- On input of a stem, only designs with that stem are checked
+- Total stems in stock is separately kept, and designs are skipped when the total stems
+  in stock does not meet the design requirements
 
 ## Comparison to other solutions
 
