@@ -22,6 +22,18 @@ Besides this a number of optimizations are implemented:
 - Total stems in stock is separately kept, and designs are skipped when the total stems
   in stock does not meet the design requirements
 
+## How to run it
+
+Make a release build:
+```bash
+cargo build --release
+```
+
+Run it:
+```bash
+target/release/ranger
+```
+
 ## Comparison to other solutions
 
 *These benchmarks were run on an AMD Ryzen 7 1700.*
