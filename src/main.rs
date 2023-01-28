@@ -176,9 +176,9 @@ impl ProductionLine {
             if grabbed_stems.simd_lt(design.min_stems).any() {
                 continue;
             }
-            let excess_stems = grabbed_stems - design.min_stems;
             let mut excess_amount = grabbed_amount - design.total;
             if excess_amount != 0 {
+                let excess_stems = grabbed_stems - design.min_stems;
                 for stem_index in 0..26 {
                     let stem_amount = excess_stems[stem_index];
                     if stem_amount == 0 {
