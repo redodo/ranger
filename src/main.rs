@@ -205,15 +205,17 @@ fn main() {
     let lines = stdin.by_ref();
     let mut warehouse = Warehouse::new();
     for line in &mut *lines {
-        if line.as_ref().unwrap().is_empty() {
+        let line_ref = line.as_ref().unwrap();
+        if line_ref.is_empty() {
             break;
         }
-        warehouse.add_design(line.unwrap().as_str());
+        warehouse.add_design(line_ref.as_str());
     }
     for line in &mut *lines {
-        if line.as_ref().unwrap().is_empty() {
+        let line_ref = line.as_ref().unwrap();
+        if line_ref.is_empty() {
             break;
         }
-        warehouse.add_stem(line.unwrap().as_str());
+        warehouse.add_stem(line_ref.as_str());
     }
 }
