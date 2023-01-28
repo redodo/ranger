@@ -33,9 +33,9 @@ $ multitime -n100 -q -s0 -i "cat samples/1m.txt" ranger
 ===> multitime results
 1: -i "cat samples/1m.txt" -q ranger
             Mean        Std.Dev.    Min         Median      Max
-real        0.162       0.014       0.141       0.172       0.190
-user        0.140       0.015       0.103       0.138       0.169
-sys         0.022       0.008       0.007       0.020       0.041
+real        0.144       0.012       0.127       0.139       0.165
+user        0.121       0.012       0.094       0.120       0.148
+sys         0.023       0.008       0.003       0.023       0.040
 ```
 
 [edelooff/carrange](https://github.com/edelooff/carrange) (C++):
@@ -45,9 +45,9 @@ $ multitime -n100 -q -s0 -i "cat samples/1m.txt" composer
 ===> multitime results
 1: -i "cat samples/1m.txt" -q composer
             Mean        Std.Dev.    Min         Median      Max
-real        0.201       0.013       0.180       0.206       0.224
-user        0.179       0.015       0.150       0.178       0.212
-sys         0.022       0.008       0.003       0.020       0.047
+real        0.186       0.013       0.165       0.192       0.214
+user        0.162       0.015       0.128       0.165       0.194
+sys         0.023       0.009       0.003       0.022       0.064
 ```
 
 [Gradecak/rs-bouquets](https://github.com/Gradecak/rs-bouquets) (Rust):
@@ -57,9 +57,9 @@ $ multitime -n100 -q -s0 -i "cat samples/1m.txt" rs-bouquets
 ===> multitime results
 1: -i "cat samples/1m.txt" -q rs-bouquets
             Mean        Std.Dev.    Min         Median      Max
-real        0.406       0.016       0.377       0.413       0.435
-user        0.380       0.018       0.331       0.383       0.413
-sys         0.025       0.008       0.007       0.023       0.046
+real        0.365       0.014       0.341       0.366       0.393
+user        0.343       0.014       0.317       0.343       0.379
+sys         0.020       0.007       0.003       0.020       0.040
 ```
 
 ## Benchmark of reference solution
