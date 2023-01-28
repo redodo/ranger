@@ -118,12 +118,14 @@ impl FromStr for Design {
 
 #[derive(Debug)]
 struct ProductionLine {
+    total: u16,
     stems: u16x32,
     designs: Vec<Design>,
 }
 impl ProductionLine {
     pub fn new() -> Self {
         Self {
+            total: 0,
             stems: u16x32::splat(0),
             designs: Vec::new(),
         }
@@ -132,8 +134,12 @@ impl ProductionLine {
         self.designs.push(design);
     }
     pub fn add_stem(&mut self, stem_index: usize) {
+        self.total += 1;
         self.stems[stem_index] += 1;
         for design in &self.designs {
+            if self.total < design.total {
+                continue;
+            }
             if self.stems.simd_lt(design.min_stems).any() {
                 continue;
             }
@@ -159,6 +165,7 @@ impl ProductionLine {
                 }
             }
             self.stems -= grabbed_stems;
+            self.total -= design.total;
             let out = io::stdout();
             let mut handle = out.lock();
             write!(handle, "{}{}", design.name, design.size).unwrap();
