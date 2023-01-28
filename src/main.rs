@@ -2,9 +2,9 @@
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::fmt;
-use std::io;
 use std::simd::{u16x32, SimdOrd, SimdPartialOrd, SimdUint};
 use std::str::FromStr;
+use std::{io, io::Write};
 
 #[derive(Debug)]
 enum Size {
@@ -159,16 +159,17 @@ impl ProductionLine {
                 }
             }
             self.stems -= grabbed_stems;
-            let stem_string: String = grabbed_stems
-                .as_array()
-                .iter()
-                .enumerate()
-                .filter(|(_stem_index, amount)| amount != &&0)
-                .map(|(stem_index, amount)| {
-                    format!("{}{}", *amount, stem_index_to_char(stem_index))
-                })
-                .collect();
-            println!("{}{}{}", design.name, design.size, stem_string);
+            let out = io::stdout();
+            let mut handle = out.lock();
+            write!(handle, "{}{}", design.name, design.size).unwrap();
+            for stem_index in 0..26 {
+                let amount = grabbed_stems[stem_index];
+                if amount != 0 {
+                    write!(handle, "{}{}", amount, stem_index_to_char(stem_index)).unwrap();
+                }
+            }
+            write!(handle, "\n").unwrap();
+            drop(handle);
             return;
         }
     }
