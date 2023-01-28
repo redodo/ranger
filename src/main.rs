@@ -120,23 +120,33 @@ impl FromStr for Design {
 struct ProductionLine {
     total: u16,
     stems: u16x32,
-    designs: Vec<Design>,
+    designs: [Option<Design>; 26],
+    add_design_index: usize,
 }
 impl ProductionLine {
     pub fn new() -> Self {
         Self {
             total: 0,
             stems: u16x32::splat(0),
-            designs: Vec::new(),
+            designs: [
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                None, None, None, None, None, None, None, None, None, None, None, None,
+            ],
+            add_design_index: 0,
         }
     }
     pub fn add_design(&mut self, design: Design) {
-        self.designs.push(design);
+        self.designs[self.add_design_index] = Some(design);
+        self.add_design_index += 1;
     }
     pub fn add_stem(&mut self, stem_index: usize) {
         self.total += 1;
         self.stems[stem_index] += 1;
-        for design in &self.designs {
+        for design_option in &self.designs {
+            let design = match design_option {
+                Some(design) => design,
+                None => break,
+            };
             if self.total < design.total {
                 continue;
             }
