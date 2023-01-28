@@ -140,12 +140,12 @@ impl ProductionLine {
             if self.total < design.total {
                 continue;
             }
-            if self.stems.simd_lt(design.min_stems).any() {
-                continue;
-            }
             let mut grabbed_stems = self.stems.simd_min(design.max_stems);
             let grabbed_amount = grabbed_stems.reduce_sum();
             if grabbed_amount < design.total {
+                continue;
+            }
+            if grabbed_stems.simd_lt(design.min_stems).any() {
                 continue;
             }
             let excess_stems = grabbed_stems - design.min_stems;
