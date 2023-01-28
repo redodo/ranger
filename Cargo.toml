@@ -9,3 +9,6 @@ edition = "2021"
 [dependencies]
 lazy_static = "1"
 regex = "1"
+
+[profile.release]
+lto = true
