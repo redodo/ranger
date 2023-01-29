@@ -16,11 +16,16 @@ stem, we need to make sure that we return the excess amount of stems we took. Th
 done over a simple iteration where stems are returned to the stock until the amount
 required by the design is met.
 
-Besides this a number of optimizations are implemented:
+Besides this a number of other optimizations are implemented:
 
-- On input of a stem, only designs with that stem are checked
+- On input of a stem, only designs with that stem are checked.
 - Total stems in stock is separately kept, and designs are skipped when the total stems
-  in stock does not meet the design requirements
+  in stock does not meet the design requirements.
+- The implicit minimum of a species in a design is increased from 1 where possible. For
+  example, *AL5a5* requires at least 5 times *a*, and *BL5a1b5* requires at least 4
+  times *a*.
+- The maximum species in a design is decreased where possible. For example, *AL10a5*
+  can not have more than 5 times *a*, and *BL5a1b5* can not have more than 4 times *a*.
 
 ## How to run it
 
