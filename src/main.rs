@@ -158,7 +158,6 @@ impl FromStr for Design {
 
 #[derive(Debug)]
 struct ProductionLine {
-    total: u16,
     stems: u16x32,
     designs: [Option<Design>; 26],
     add_design_index: usize,
@@ -167,7 +166,6 @@ struct ProductionLine {
 impl ProductionLine {
     pub fn new() -> Self {
         Self {
-            total: 0,
             stems: u16x32::splat(0),
             designs: [
                 None, None, None, None, None, None, None, None, None, None, None, None, None, None,
@@ -194,7 +192,6 @@ impl ProductionLine {
         self.add_design_index += 1;
     }
     pub fn add_stem(&mut self, stem_index: usize) {
-        self.total += 1;
         self.stems[stem_index] += 1;
         for design_index in &self.designs_per_stem[stem_index] {
             if *design_index == usize::MAX {
@@ -205,9 +202,6 @@ impl ProductionLine {
                 Some(design) => design,
                 None => break,
             };
-            if self.total < design.total {
-                continue;
-            }
             let mut grabbed_stems = self.stems.simd_min(design.max_stems);
             let grabbed_amount = grabbed_stems.reduce_sum();
             if grabbed_amount < design.total {
@@ -233,7 +227,6 @@ impl ProductionLine {
                 }
             }
             self.stems -= grabbed_stems;
-            self.total -= design.total;
             let out = io::stdout();
             let mut handle = out.lock();
             write!(handle, "{}{}", design.name, design.size).unwrap();
