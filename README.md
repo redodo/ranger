@@ -9,7 +9,7 @@ amount of stems in a design:
 
 1. Take the maximum amount of stems we can take: `stems = simd_min(stock, design.max_stems)`
 2. Check if we have enough stems: `reduce_sum(stems) >= design.total`
-3. Check if we at least one of each needed stem: `!any(simd_lt(stems, design.min_stems))`
+3. Check if we at least one of each needed stem: `all(simd_ge(stems, design.min_stems))`
 
 After this we have enough stems. However, since we took the maximum amount possible per
 stem, we need to make sure that we return the excess amount of stems we took. This is
