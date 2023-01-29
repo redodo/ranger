@@ -1,42 +1,15 @@
 #![feature(portable_simd)]
-use lazy_static::lazy_static;
-use regex::Regex;
-use std::fmt;
+use std::default::Default;
 use std::simd::{u16x32, SimdOrd, SimdPartialOrd, SimdUint};
 use std::str::FromStr;
 use std::{io, io::Write};
 
-#[derive(Debug)]
-enum Size {
-    Small,
-    Large,
-}
-impl Size {
-    fn as_usize(&self) -> usize {
-        match self {
-            Size::Small => 0,
-            Size::Large => 1,
-        }
-    }
-}
-impl FromStr for Size {
-    type Err = ();
-    fn from_str(input: &str) -> Result<Size, Self::Err> {
-        match input {
-            "S" => Ok(Size::Small),
-            "L" => Ok(Size::Large),
-            _ => Err(()),
-        }
-    }
-}
-impl fmt::Display for Size {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Size::Small => write!(f, "S"),
-            Size::Large => write!(f, "L"),
-        }
-    }
-}
+use lazy_static::lazy_static;
+use regex::Regex;
+
+mod size;
+
+use size::{Size, SizeMap};
 
 fn char_to_stem_index(value: char) -> usize {
     const LOWER_BOUND: usize = 'a' as usize;
@@ -163,8 +136,8 @@ struct ProductionLine {
     add_design_index: usize,
     designs_per_stem: [[usize; 26]; 26],
 }
-impl ProductionLine {
-    pub fn new() -> Self {
+impl Default for ProductionLine {
+    fn default() -> Self {
         Self {
             stems: u16x32::splat(0),
             designs: [
@@ -175,6 +148,8 @@ impl ProductionLine {
             designs_per_stem: [[usize::MAX; 26]; 26],
         }
     }
+}
+impl ProductionLine {
     pub fn add_design(&mut self, design: Design) {
         for (stem_index, amount) in design.min_stems.as_array().iter().enumerate() {
             if *amount != 0 {
@@ -243,28 +218,28 @@ impl ProductionLine {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct Warehouse {
-    production_lines: [ProductionLine; 2],
+    production_lines: SizeMap<ProductionLine>,
 }
 
 impl Warehouse {
     pub fn new() -> Self {
-        Self {
-            production_lines: [ProductionLine::new(), ProductionLine::new()],
-        }
+        Self::default()
     }
     pub fn add_design(&mut self, design_str: &str) {
         let design = Design::from_str(design_str).unwrap();
         if design.total >= design.min_stems.reduce_sum() {
             // Only push possible designs
-            self.production_lines[design.size.as_usize()].add_design(design);
+            self.production_lines
+                .get_mut(&design.size)
+                .add_design(design);
         }
     }
     pub fn add_stem(&mut self, stem_str: &str) {
         let stem_index = char_to_stem_index(stem_str.chars().nth(0).unwrap());
         let size = Size::from_str(&stem_str[1..2]).unwrap();
-        self.production_lines[size.as_usize()].add_stem(stem_index);
+        self.production_lines.get_mut(&size).add_stem(stem_index);
     }
 }
 
