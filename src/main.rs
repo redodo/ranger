@@ -87,6 +87,7 @@ impl FromStr for Design {
         let mut min_stems = u16x32::splat(0);
         let mut max_stems = u16x32::splat(0);
         let stems = design_match.name("stems").unwrap().as_str();
+        let mut unique_stem_count = 0;
         for stem_match in STEMS_RE.captures_iter(stems) {
             let stem_index = char_to_stem_index(
                 stem_match
@@ -105,7 +106,46 @@ impl FromStr for Design {
                 .unwrap();
             min_stems[stem_index] = 1;
             max_stems[stem_index] = max;
+            unique_stem_count += 1;
         }
+
+        // @Optimization - Minimize the maximum amount of stems.
+        //
+        // For example, given the design "AL10a5", it is obvious that the maximum
+        // possible amount for 'a' would be '5', so this routine updates it to "AL5a5".
+        //
+        // This reduces the posibility of grabbing too many stems from the stock, which
+        // costs precious time to put back.
+        {
+            let max_per_stem = 1 + total - unique_stem_count;
+            for stem_max in max_stems.as_mut_array().iter_mut() {
+                *stem_max = u16::min(*stem_max, max_per_stem);
+            }
+        }
+
+        // @Optimize - Specify minimum possible amounts per stem.
+        //
+        // For example, given the design "AL5a5", the only possible bouquet that can be
+        // created is "AL5a5".
+        //
+        // The minimum can be computed with the following formula:
+        //
+        //     stem_min = max(1, stem_max - sum(other_stems_max))
+        //
+        // Specifying a minimum amount required per species could allow for stopping
+        // the design check early, or perhaps even disregard multiple designs altogether
+        // with a SIMD operation.
+        {
+            let sum_max: u16 = max_stems.reduce_sum();
+            for (stem_index, stem_max) in max_stems.as_array().iter().enumerate() {
+                if *stem_max == 0 {
+                    continue;
+                }
+                min_stems[stem_index] =
+                    u16::max(1, stem_max - u16::min(*stem_max, sum_max - stem_max));
+            }
+        }
+
         Ok(Design {
             name,
             size,
