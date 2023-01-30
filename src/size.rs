@@ -11,7 +11,7 @@ impl std::str::FromStr for Size {
         match input {
             "S" => Ok(Size::Small),
             "L" => Ok(Size::Large),
-            _ => Err(format!("Invalid size: {}", input)),
+            _ => Err(format!("Invalid size: {input}")),
         }
     }
 }

@@ -48,7 +48,7 @@ impl FromStr for Design {
             .unwrap()
             .as_str()
             .chars()
-            .nth(0)
+            .next()
             .unwrap();
         let size = Size::from_str(design_match.name("size").unwrap().as_str()).unwrap();
         let total = design_match
@@ -68,7 +68,7 @@ impl FromStr for Design {
                     .unwrap()
                     .as_str()
                     .chars()
-                    .nth(0)
+                    .next()
                     .unwrap(),
             );
             let max = stem_match
@@ -211,7 +211,7 @@ impl ProductionLine {
                     write!(handle, "{}{}", amount, stem_index_to_char(stem_index)).unwrap();
                 }
             }
-            write!(handle, "\n").unwrap();
+            writeln!(handle).unwrap();
             drop(handle);
             return;
         }
@@ -237,7 +237,7 @@ impl Warehouse {
         }
     }
     pub fn add_stem(&mut self, stem_str: &str) {
-        let stem_index = char_to_stem_index(stem_str.chars().nth(0).unwrap());
+        let stem_index = char_to_stem_index(stem_str.chars().next().unwrap());
         let size = Size::from_str(&stem_str[1..2]).unwrap();
         self.production_lines.get_mut(&size).add_stem(stem_index);
     }
