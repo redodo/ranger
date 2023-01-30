@@ -135,6 +135,7 @@ struct ProductionLine {
     designs: [Option<Design>; 26],
     add_design_index: usize,
     designs_per_stem: [[usize; 26]; 26],
+    max_per_stem: [u16; 26],
 }
 impl Default for ProductionLine {
     fn default() -> Self {
@@ -146,13 +147,15 @@ impl Default for ProductionLine {
             ],
             add_design_index: 0,
             designs_per_stem: [[usize::MAX; 26]; 26],
+            max_per_stem: [0; 26],
         }
     }
 }
 impl ProductionLine {
     pub fn add_design(&mut self, design: Design) {
-        for (stem_index, amount) in design.min_stems.as_array().iter().enumerate() {
+        for (stem_index, amount) in design.max_stems.as_array().iter().enumerate() {
             if *amount != 0 {
+                self.max_per_stem[stem_index] = u16::max(self.max_per_stem[stem_index], *amount);
                 for (insert_index, design_index) in
                     self.designs_per_stem[stem_index].iter().enumerate()
                 {
@@ -168,6 +171,11 @@ impl ProductionLine {
     }
     pub fn add_stem(&mut self, stem_index: usize) {
         self.stems[stem_index] += 1;
+        if self.stems[stem_index] > self.max_per_stem[stem_index] {
+            // @Optimization - If we already surpassed the max required numbers of stems
+            // of this species for all designs, we can't make a new design this round.
+            return;
+        }
         for design_index in &self.designs_per_stem[stem_index] {
             if *design_index == usize::MAX {
                 break;

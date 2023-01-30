@@ -26,6 +26,8 @@ Besides this a number of other optimizations are implemented:
   times *a*.
 - The maximum species in a design is decreased where possible. For example, *AL10a5*
   can not have more than 5 times *a*, and *BL5a1b5* can not have more than 4 times *a*.
+- The maximum possible stems per species in any design is used to skip bouquet creation
+  if a stem is input that already exceeds the stock by this amount.
 
 ## How to run it
 
@@ -50,9 +52,9 @@ $ multitime -n100 -q -s0 -i "cat samples/1m.txt" ranger
 ===> multitime results
 1: -i "cat samples/1m.txt" -q ranger
             Mean        Std.Dev.    Min         Median      Max
-real        0.131       0.013       0.113       0.129       0.152
-user        0.109       0.013       0.083       0.109       0.135
-sys         0.021       0.008       0.003       0.020       0.047
+real        0.128       0.013       0.110       0.124       0.153
+user        0.106       0.014       0.077       0.106       0.139
+sys         0.022       0.009       0.000       0.020       0.041
 ```
 
 [edelooff/carrange](https://github.com/edelooff/carrange) (C++):
