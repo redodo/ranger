@@ -169,6 +169,21 @@ impl ProductionLine {
         self.designs[self.add_design_index] = Some(design);
         self.add_design_index += 1;
     }
+    pub fn preprocess(&mut self) {
+        // @Optimization - Sort the designs per stem array by total amount of stems to
+        // prioritize simpler designs.
+        for designs in self.designs_per_stem.iter_mut() {
+            designs.sort_by_key(|design_index| {
+                if *design_index == usize::MAX {
+                    return u16::MAX;
+                }
+                match &self.designs[*design_index] {
+                    Some(design) => design.total,
+                    None => u16::MAX,
+                }
+            });
+        }
+    }
     pub fn add_stem(&mut self, stem_index: usize) {
         self.stems[stem_index] += 1;
         if self.stems[stem_index] > self.max_per_stem[stem_index] {
@@ -244,6 +259,10 @@ impl Warehouse {
                 .add_design(design);
         }
     }
+    pub fn preprocess(&mut self) {
+        self.production_lines.get_mut(&Size::Small).preprocess();
+        self.production_lines.get_mut(&Size::Large).preprocess();
+    }
     pub fn add_stem(&mut self, stem_str: &str) {
         let stem_index = char_to_stem_index(stem_str.chars().next().unwrap());
         let size = Size::from_str(&stem_str[1..2]).unwrap();
@@ -262,6 +281,7 @@ fn main() {
         }
         warehouse.add_design(line_ref.as_str());
     }
+    warehouse.preprocess();
     for line in &mut *lines {
         let line_ref = line.as_ref().unwrap();
         if line_ref.is_empty() {
