@@ -45,12 +45,24 @@ target/release/ranger
 
 *These benchmarks were run on an AMD Ryzen 7 1700.*
 
+[redodo/cstem](https://github.com/redodo/cstem) (C):
+
+```bash
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ./cstem
+===> multitime results
+1: -i "cat samples/1m.txt" -q ./cstem
+            Mean        Std.Dev.    Min         Median      Max
+real        0.097       0.012       0.079       0.091       0.116
+user        0.095       0.012       0.075       0.090       0.116
+sys         0.002       0.002       0.000       0.000       0.007
+```
+
 This one (Rust):
 
 ```bash
-$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ranger
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ./ranger
 ===> multitime results
-1: -i "cat samples/1m.txt" -q ranger
+1: -i "cat samples/1m.txt" -q ./ranger
             Mean        Std.Dev.    Min         Median      Max
 real        0.124       0.013       0.107       0.118       0.145
 user        0.103       0.013       0.073       0.102       0.130
@@ -60,9 +72,9 @@ sys         0.021       0.006       0.003       0.020       0.036
 [edelooff/carrange](https://github.com/edelooff/carrange) (C++):
 
 ```bash
-$ multitime -n100 -q -s0 -i "cat samples/1m.txt" composer
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ./composer
 ===> multitime results
-1: -i "cat samples/1m.txt" -q composer
+1: -i "cat samples/1m.txt" -q ./composer
             Mean        Std.Dev.    Min         Median      Max
 real        0.177       0.013       0.161       0.171       0.214
 user        0.157       0.014       0.131       0.153       0.200
@@ -72,9 +84,9 @@ sys         0.020       0.007       0.003       0.020       0.037
 [Gradecak/rs-bouquets](https://github.com/Gradecak/rs-bouquets) (Rust):
 
 ```bash
-$ multitime -n100 -q -s0 -i "cat samples/1m.txt" rs-bouquets
+$ multitime -n100 -q -s0 -i "cat samples/1m.txt" ./rs-bouquets
 ===> multitime results
-1: -i "cat samples/1m.txt" -q rs-bouquets
+1: -i "cat samples/1m.txt" -q ./rs-bouquets
             Mean        Std.Dev.    Min         Median      Max
 real        0.360       0.015       0.338       0.356       0.396
 user        0.338       0.017       0.311       0.336       0.379
