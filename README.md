@@ -57,7 +57,7 @@ user        0.095       0.012       0.075       0.090       0.116
 sys         0.002       0.002       0.000       0.000       0.007
 ```
 
-This one (Rust):
+redodo/ranger (Rust):
 
 ```bash
 $ multitime -n100 -q -s0 -i "cat samples/1m.txt" ./ranger
